@@ -59,8 +59,31 @@ void sub_bytes(unsigned char *block) {
 
 
 void shift_rows(unsigned char *block) {
-  // TODO: Implement me!
+      unsigned char temp;
+
+    // Second row shift left by 1
+    temp = block[1]; 
+    block[1] = block[5];
+    block[5] = block[9];
+    block[9] = block[13];
+    block[13] = temp;
+
+    // Third row shift left by 2
+    temp = block[2]; // Store the first element of row 2
+    block[2] = block[10];
+    block[10] = temp;
+    temp = block[6]; // Store the second element of row 2
+    block[6] = block[14];
+    block[14] = temp;
+
+    // Fourth row shift left by 3 (or right by 1, same effect)
+    temp = block[15]; // Store the last element of row 3
+    block[15] = block[11];
+    block[11] = block[7];
+    block[7] = block[3];
+    block[3] = temp;
 }
+
 
 void mix_columns(unsigned char *block) {
   // TODO: Implement me!
