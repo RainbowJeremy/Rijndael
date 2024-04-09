@@ -85,8 +85,50 @@ void shift_rows(unsigned char *block) {
 }
 
 
+
+unsigned char gmul(unsigned char a, unsigned char b) {
+    unsigned char p = 0; // Result of the multiplication (initially 0, representing the zero polynomial).
+    unsigned char hi_bit_set; // To check for the overflow bit (x^8 term).
+
+    for (int counter = 0; counter < 8; counter++) {
+        // If the current bit of b (representing the coefficient of x^counter in b(x)) is set...
+        if (b & 1) {
+            // Add a(x) to p(x) (in GF(2^8), addition is XOR).
+            p ^= a; 
+        }
+
+        // Prepare for the next iteration:
+        // Check if the x^7 term of a(x) is set before multiplication by x.
+        hi_bit_set = a & 0x80; 
+        // Multiply a(x) by x (equivalent to a left shift by 1).
+        a <<= 1; 
+
+        // If the multiplication resulted in x^8 term, reduce by the irreducible polynomial (x^8 + x^4 + x^3 + x + 1).
+        if (hi_bit_set) {
+            a ^= 0x1b; // 0x1b represents the polynomial x^8 + x^4 + x^3 + x + 1.
+        }
+
+        // Prepare b(x) for the next term (equivalent to dividing by x, or shifting right by 1).
+        b >>= 1; 
+    }
+
+    return p; // Return the product p(x) = a(x) * b(x) mod (x^8 + x^4 + x^3 + x + 1).
+}
+
+
+
+
 void mix_columns(unsigned char *block) {
-  // TODO: Implement me!
+    unsigned char temp[4];
+    for (int i = 0; i < 4; i++) { // Iterate over columns
+        temp[0] = gmul(0x02, block[i*4]) ^ gmul(0x03, block[i*4+1]) ^ block[i*4+2] ^ block[i*4+3];
+        temp[1] = block[i*4] ^ gmul(0x02, block[i*4+1]) ^ gmul(0x03, block[i*4+2]) ^ block[i*4+3];
+        temp[2] = block[i*4] ^ block[i*4+1] ^ gmul(0x02, block[i*4+2]) ^ gmul(0x03, block[i*4+3]);
+        temp[3] = gmul(0x03, block[i*4]) ^ block[i*4+1] ^ block[i*4+2] ^ gmul(0x02, block[i*4+3]);
+        for (int j = 0; j < 4; j++) {
+            block[i*4+j] = temp[j];
+        }
+    }
 }
 
 /*
