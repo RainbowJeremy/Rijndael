@@ -160,9 +160,34 @@ void invert_sub_bytes(unsigned char *block) {
 }
 
 
+
 void invert_shift_rows(unsigned char *block) {
-  // TODO: Implement me!
+   unsigned char temp;
+
+    // Invert shift for the second row - shift right by 1
+    temp = block[13]; // Store the last element of row 1
+    block[13] = block[9];
+    block[9] = block[5];
+    block[5] = block[1];
+    block[1] = temp;
+
+    // Invert shift for the third row - shift right by 2
+    temp = block[2]; // Swap first and third elements
+    block[2] = block[10];
+    block[10] = temp;
+    temp = block[6]; // Swap second and fourth elements
+    block[6] = block[14];
+    block[14] = temp;
+
+    // Invert shift for the fourth row - shift right by 3 (or left by 1, same effect)
+    temp = block[3]; // Store the first element of row 3
+    block[3] = block[7];
+    block[7] = block[11];
+    block[11] = block[15];
+    block[15] = temp;
 }
+
+
 
 void invert_mix_columns(unsigned char *block) {
   // TODO: Implement me!
