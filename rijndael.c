@@ -207,18 +207,64 @@ void invert_mix_columns(unsigned char *block) {
  * This operation is shared between encryption and decryption
  */
 void add_round_key(unsigned char *block, unsigned char *round_key) {
-  // TODO: Implement me!
+    for (int i = 0; i < 16; i++) {
+        block[i] ^= round_key[i]; // Perform XOR on each byte
+    }
 }
 
+// Round constant
+unsigned char rcon[10] = {
+    0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36
+};
 /*
  * This function should expand the round key. Given an input,
  * which is a single 128-bit key, it should return a 176-byte
  * vector, containing the 11 round keys one after the other
  */
-unsigned char *expand_key(unsigned char *cipher_key) {
-  // TODO: Implement me!
-  return 0;
+void key_expansion(unsigned char* cipher_key, unsigned char* expanded_keys) {
+    int bytes_generated = 16; // We start after the first 16 bytes
+    int rcon_iteration = 0;
+    unsigned char temp[4]; // Temporary storage for the core
+
+    // The first 16 bytes of the expanded key are the cipher key
+    for (int i = 0; i < 16; i++) {
+        expanded_keys[i] = cipher_key[i];
+    }
+
+    // Generate the remaining bytes until we get a total of 176 bytes
+    while (bytes_generated < 176) {
+        // Read 4 bytes for the core operation
+        for (int i = 0; i < 4; i++) {
+            temp[i] = expanded_keys[i + bytes_generated - 4];
+        }
+
+        // Perform the core operation once for each 16 byte key
+        if (bytes_generated % 16 == 0) {
+            // Rotate the input 8 bits to the left
+            unsigned char a = temp[0];
+            temp[0] = temp[1];
+            temp[1] = temp[2];
+            temp[2] = temp[3];
+            temp[3] = a;
+
+            // Apply S-box substitution
+            for (int i = 0; i < 4; i++) {
+                temp[i] = S_block[temp[i]];
+            }
+
+            // XOR the first byte with the round constant
+            temp[0] ^= rcon[rcon_iteration++];
+        }
+
+        // XOR temp with the four-byte block 16 bytes before the new expanded key. This step is done for all bytes.
+        for (unsigned char a = 0; a < 4; a++) {
+            expanded_keys[bytes_generated] = expanded_keys[bytes_generated - 16] ^ temp[a];
+            bytes_generated++;
+        }
+    }
 }
+
+
 
 /*
  * The implementations of the functions declared in the
