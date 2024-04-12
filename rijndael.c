@@ -190,8 +190,18 @@ void invert_shift_rows(unsigned char *block) {
 
 
 void invert_mix_columns(unsigned char *block) {
-  // TODO: Implement me!
+    unsigned char temp[4];
+    for (int i = 0; i < 4; i++) {
+        temp[0] = gmul(0x0e, block[i*4]) ^ gmul(0x0b, block[i*4+1]) ^ gmul(0x0d, block[i*4+2]) ^ gmul(0x09, block[i*4+3]);
+        temp[1] = gmul(0x09, block[i*4]) ^ gmul(0x0e, block[i*4+1]) ^ gmul(0x0b, block[i*4+2]) ^ gmul(0x0d, block[i*4+3]);
+        temp[2] = gmul(0x0d, block[i*4]) ^ gmul(0x09, block[i*4+1]) ^ gmul(0x0e, block[i*4+2]) ^ gmul(0x0b, block[i*4+3]);
+        temp[3] = gmul(0x0b, block[i*4]) ^ gmul(0x0d, block[i*4+1]) ^ gmul(0x09, block[i*4+2]) ^ gmul(0x0e, block[i*4+3]);
+        for (int j = 0; j < 4; j++) {
+            block[i*4+j] = temp[j];
+        }
+    }
 }
+
 
 /*
  * This operation is shared between encryption and decryption
