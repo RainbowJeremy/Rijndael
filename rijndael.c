@@ -271,9 +271,37 @@ void key_expansion(unsigned char* cipher_key, unsigned char* expanded_keys) {
  * header file should go here
  */
 unsigned char *aes_encrypt_block(unsigned char *plaintext, unsigned char *key) {
-  // TODO: Implement me!
-  unsigned char *output =
-      (unsigned char *)malloc(sizeof(unsigned char) * BLOCK_SIZE);
+  unsigned char* output = (unsigned char*)malloc(sizeof(unsigned char) * BLOCK_SIZE);
+    if (!output) {
+        return NULL; // Allocation failed
+    }
+
+    // With AES-128, we need 176 bytes of expanded keys
+    unsigned char expandedKeys[176]; 
+    key_expansion(key, expandedKeys);
+
+    // Copy plaintext to output as the initial state
+    for (int i = 0; i < BLOCK_SIZE; i++) {
+        output[i] = plaintext[i];
+    }
+
+    // Initial round key addition
+    add_round_key(output, expandedKeys);
+
+    // 9 rounds of encryption
+    for (int i = 1; i < 10; i++) {
+        sub_bytes(output);
+        shift_rows(output);
+        mix_columns(output);
+        add_round_key(output, expandedKeys + (BLOCK_SIZE * i));
+    }
+
+    // Final round (without mix columns)
+    sub_bytes(output);
+    shift_rows(output);
+    add_round_key(output, expandedKeys + 160); // The final round key
+
+  //unsigned char *output = (unsigned char *)malloc(sizeof(unsigned char) * BLOCK_SIZE);
   return output;
 }
 
