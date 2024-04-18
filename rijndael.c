@@ -305,10 +305,35 @@ unsigned char *aes_encrypt_block(unsigned char *plaintext, unsigned char *key) {
   return output;
 }
 
-unsigned char *aes_decrypt_block(unsigned char *ciphertext,
-                                 unsigned char *key) {
-  // TODO: Implement me!
-  unsigned char *output =
-      (unsigned char *)malloc(sizeof(unsigned char) * BLOCK_SIZE);
-  return output;
+unsigned char* aes_decrypt_block(unsigned char* ciphertext, unsigned char* key) {
+    unsigned char* output = (unsigned char*)malloc(sizeof(unsigned char) * BLOCK_SIZE);
+    if (!output) {
+        return NULL; // Allocation failed
+    }
+
+    unsigned char expandedKeys[176]; // For AES-128, we need 176 bytes of expanded keys
+    key_expansion(key, expandedKeys);
+
+    // Copy ciphertext to output as the initial state
+    for (int i = 0; i < BLOCK_SIZE; i++) {
+        output[i] = ciphertext[i];
+    }
+
+    // Initial round key addition (using the last round key)
+    add_round_key(output, expandedKeys + 160); // The last round key
+
+    // 9 rounds of decryption
+    for (int round = 9; round > 0; round--) {
+        invert_shift_rows(output);
+        invert_sub_bytes(output);
+        add_round_key(output, expandedKeys + (BLOCK_SIZE * round));
+        invert_mix_columns(output);
+    }
+
+    // Final round (without invert mix columns)
+    invert_shift_rows(output);
+    invert_sub_bytes(output);
+    add_round_key(output, expandedKeys); // The initial round key
+
+    return output;
 }
