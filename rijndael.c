@@ -272,7 +272,6 @@ void key_expansion(unsigned char* cipher_key, unsigned char* expanded_keys) {
  * header file should go here
  */
 unsigned char *aes_encrypt_block(unsigned char *plaintext, unsigned char *key) {
-  printf("aes encrypt block");
   unsigned char* output = (unsigned char*)malloc(sizeof(unsigned char) * BLOCK_SIZE);
     if (!output) {
         return NULL; // Allocation failed
