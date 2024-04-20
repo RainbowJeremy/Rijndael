@@ -42,7 +42,7 @@ def test_aes_encryption():
         key = generate_random_plaintext(16)   # Assuming AES-128 for simplicity
     
         py_ciphertext = py_aes.encrypt(bytes(key), bytes(plaintext))
-        c_ciphertext = c_aes.aes_encrypt_block(plaintext, key)
+        c_ciphertext = c_aes.aes_encrypt_block(bytes(plaintext), bytes(key))
         print("Python ciphertext", py_ciphertext)
         print("C ciphertext", c_ciphertext)
         # Compare outputs
