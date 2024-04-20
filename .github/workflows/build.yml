@@ -13,7 +13,7 @@ jobs:
           sudo apt install -y build-essential python-is-python3
           make
       - name: Add project directory to PYTHONPATH
-        run: echo "${{ github.workspace }}" >> $GITHUB_PATH
+          run: echo "${{ github.workspace }}" >> $GITHUB_PATH
       - name: Run test.py
         run: python tests/test.py
         working-directory: ${{ github.workspace }}

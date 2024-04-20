@@ -1,3 +1,5 @@
+print("123 hello world")
+
 import ctypes
 import os
 import sys
