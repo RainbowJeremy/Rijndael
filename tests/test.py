@@ -38,7 +38,7 @@ def test_aes_encryption():
     
         py_ciphertext = py_aes.encrypt(bytes(key), bytes(plaintext))
         print("debug 1")
-        c_ciphertext = c_aes.aes_encrypt_block(bytes(plaintext), bytes(key))
+        c_ciphertext = c_aes.aes_encrypt_block(bytes(plaintext), key)
         print("debug 2")
 
         print("Python ciphertext", py_ciphertext)
