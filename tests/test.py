@@ -27,8 +27,17 @@ def generate_random_plaintext(length):
     return result[:length]
 
 
+def create_c_aes():
+    plaintext = generate_random_plaintext(16) 
+    key = generate_random_plaintext(16)  
+    print("plaintext", plaintext)
+    print("key", key)
+    c_ciphertext = c_aes.aes_encrypt_block(bytes(plaintext), bytes(key))
+    print("debug 2")
+
 c_aes.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
 c_aes.restype = ctypes.c_char_p
+
 
 
 def test_aes_encryption():
