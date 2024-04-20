@@ -27,11 +27,6 @@ def generate_random_plaintext(length):
     return result[:length]
 
 
-def test_encryption(plaintext):
-    py_ciphertext = py_aes.encrypt(plaintext)
-    c_ciphertext = c_aes.aes_encrypt_block(plaintext)
-    assert py_ciphertext == c_ciphertext
-
 c_aes.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
 c_aes.restype = ctypes.c_char_p
 
@@ -42,7 +37,10 @@ def test_aes_encryption():
         key = generate_random_plaintext(16)   # Assuming AES-128 for simplicity
     
         py_ciphertext = py_aes.encrypt(bytes(key), bytes(plaintext))
+        print("debug 1")
         c_ciphertext = c_aes.aes_encrypt_block(bytes(plaintext), bytes(key))
+        print("debug 2")
+
         print("Python ciphertext", py_ciphertext)
         print("C ciphertext", c_ciphertext)
         # Compare outputs
