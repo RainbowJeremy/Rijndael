@@ -5,7 +5,6 @@ sys.path.append('./lib/pythonrijndael')
 import aes as py_aes
 import time
 
-print('dir(py_aes)',dir(py_aes))
 # Load the shared library
 c_aes = ctypes.CDLL('./rijndael.so')
 
@@ -29,7 +28,7 @@ def generate_random_plaintext(length):
 
 
 def test_encryption(plaintext):
-    py_ciphertext = py_aes.encrypt_block(plaintext)
+    py_ciphertext = py_aes.encrypt(plaintext)
     c_ciphertext = c_aes.aes_encrypt_block(plaintext)
     assert py_ciphertext == c_ciphertext
 
