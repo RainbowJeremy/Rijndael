@@ -2,7 +2,7 @@ import ctypes
 import os
 import sys
 sys.path.append('./lib/pythonrijndael')
-import aes as py_aes
+import aes.aes as py_aes
 import time
 
 # Load the shared library
