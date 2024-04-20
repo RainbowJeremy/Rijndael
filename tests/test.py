@@ -1,8 +1,8 @@
 import ctypes
 import os
 import sys
-sys.path.append('/Users/fintan/secureasssign1/rijndael.o')
-import lib.pythonrijndael as py_aes
+sys.path.append('./lib/pythonrijndael')
+import aes as py_aes
 import time
 
 # Load the shared library
