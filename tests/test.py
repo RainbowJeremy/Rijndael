@@ -43,9 +43,13 @@ def test_aes_encryption():
 
         py_ciphertext = py_aes.encrypt_block(plaintext)
         c_ciphertext = c_aes.aes_encrypt_block(plaintext)
+        print("Python ciphertext", py_ciphertext)
+        print("C ciphertext", c_ciphertext)
         # Compare outputs
+        
         assert py_ciphertext == ctypes.string_at(c_ciphertext, 16)
 
+test_aes_encryption()
 """
 class TestBlock(unittest.TestCase):
 """
