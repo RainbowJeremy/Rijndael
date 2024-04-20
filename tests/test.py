@@ -41,7 +41,7 @@ def test_aes_encryption():
         plaintext = generate_random_plaintext(16)  # AES block size
         #key = generate_random_plaintext(16)   # Assuming AES-128 for simplicity
 
-        py_ciphertext = py_aes.encrypt_block(plaintext)
+        py_ciphertext = py_aes.encrypt(plaintext)
         c_ciphertext = c_aes.aes_encrypt_block(plaintext)
         print("Python ciphertext", py_ciphertext)
         print("C ciphertext", c_ciphertext)
