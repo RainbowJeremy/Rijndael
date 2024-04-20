@@ -37,6 +37,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 // TODO: Any other files you need to include should go here
 
 #include "rijndael.h"
@@ -48,6 +49,7 @@ unsigned char S_block[256] = {0x63, 0x7c,   0x77,   0x7b,   0xf2,   0x6b,   0x6f
  * Operations used when encrypting a block
  */
 void sub_bytes(unsigned char *block) {
+
   /*
  * This uses the S_block lookup table to convert byte
  */
@@ -270,6 +272,7 @@ void key_expansion(unsigned char* cipher_key, unsigned char* expanded_keys) {
  * header file should go here
  */
 unsigned char *aes_encrypt_block(unsigned char *plaintext, unsigned char *key) {
+  printf("aes encrypt block");
   unsigned char* output = (unsigned char*)malloc(sizeof(unsigned char) * BLOCK_SIZE);
     if (!output) {
         return NULL; // Allocation failed

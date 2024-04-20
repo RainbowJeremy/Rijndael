@@ -21,6 +21,7 @@ void print_128bit_block(unsigned char *block) {
 }
 
 int main() {
+  
   unsigned char plaintext[16] = {1, 2,  3,  4,  5,  6,  7,  8,
                                  9, 10, 11, 12, 13, 14, 15, 16};
   unsigned char key[16] = {50, 20, 46, 86, 67, 9, 70, 27,
