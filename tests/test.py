@@ -2,9 +2,10 @@ import ctypes
 import os
 import sys
 sys.path.append('./lib/pythonrijndael')
-import aes.aes as py_aes
+import aes as py_aes
 import time
 
+print('dir(py_aes)',dir(py_aes))
 # Load the shared library
 c_aes = ctypes.CDLL('./rijndael.so')
 
